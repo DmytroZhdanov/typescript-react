@@ -1,31 +1,41 @@
-# Завдання 1
+# TypeScript React
 
-У вас є компонент React, який використовує useRef та IntersectionObserver для визначення, коли користувач переглядає кінець вмісту. Ваше завдання полягає в наступному:
+This repository contains TypeScript solutions to various React tasks. It covers typing components,
+props, and states, utilizing React's type definitions effectively. Each task demonstrates different
+use cases and scenarios commonly encountered while working with React and TypeScript.
 
-Встановіть правильні типи пропсів для цього компонента. У ньому є дві властивості: children і onContentEndVisible. children - це будь-який валідний React вузол, а onContentEndVisible - це функція без аргументів, що повертає void.
+## Task 1
 
-Встановіть правильний тип useRef. Посилання endContentRef використовується для div, який міститься в кінці вмісту.
+You have a `React component` that uses `useRef` and `IntersectionObserver` to determine when the
+user reaches the end of the content. Your task is as follows:
 
-Встановіть правильний тип для options (клас також може бути типом для options).
+Set the correct prop types for this component. It has two properties: `children` and
+`onContentEndVisible`. `Children` can be any valid `React node`, and `onContentEndVisible` is a
+function without arguments that returns `void`.
+
+Set the correct type for useRef. The reference endContentRef is used for a div that is located at
+the end of the content.
+
+Set the correct type for options (a class can also be a type for options).
 
 ```ts
 import React, { useEffect, useRef } from "react";
 
-// Опишіть Props
+// Describe Props
 export function Observer({ children, onContentEndVisible }: Props) {
-  // Вкажіть правильний тип для useRef зверніть увагу, в який DOM елемент ми його передаємо
+  // Specify the correct type for useRef, paying attention to the DOM element we are passing it to
   const endContentRef = useRef(null);
 
   useEffect(() => {
-    // Вкажіть правильний тип для options, підказка, клас також можна вказувати як тип
+    // Specify the correct type for options, hint: you can also specify a class as a type
     const options = {
       rootMargin: "0px",
       threshold: 1.0,
       root: null,
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
         if (entry.intersectionRatio > 0) {
           onContentEndVisible();
           observer.disconnect();
@@ -51,17 +61,17 @@ export function Observer({ children, onContentEndVisible }: Props) {
 }
 ```
 
-# Завдання 2
+## Task 2
 
-Ваше завдання – додати типи для наступних елементів коду:
+Your task is to add types for the following elements of the code:
 
-RequestStep: Це рядковий літерал.
+`RequestStep`: It is a string literal.
 
-State: Цей тип являє собою об'єкт з двома властивостями isRequestInProgress і RequestStep
+`State`: This type is an object with two properties: `isRequestInProgress` and `RequestStep`.
 
-Action: Це тип, що представляє можливі дії, які можуть бути відправлені до редюсера.
+`Action`: This type represents possible actions that can be dispatched to the reducer.
 
-Дивіться код і опишіть для нього правильні типи.
+Take a look at the code and describe the correct types for it.
 
 ```ts
 import React, { useReducer } from "react";
@@ -87,17 +97,14 @@ function requestReducer(state: State, action: Action): State {
 }
 
 export function RequestComponent() {
-  const [requestState, requestDispatch] = useReducer(
-    requestReducer,
-    initialState
-  );
+  const [requestState, requestDispatch] = useReducer(requestReducer, initialState);
 
   const startRequest = () => {
     requestDispatch({ type: "START_REQUEST" });
-    // Імітуємо запит до сервера
+    // Simulate a request to the server
     setTimeout(() => {
       requestDispatch({ type: "PENDING_REQUEST" });
-      // Імітуємо отримання відповіді від сервера
+      // Simulate receiving a response from the server
       setTimeout(() => {
         requestDispatch({ type: "FINISH_REQUEST" });
       }, 2000);
@@ -110,9 +117,9 @@ export function RequestComponent() {
 
   return (
     <div>
-      <button onClick={startRequest}>Почати запит</button>
-      <button onClick={resetRequest}>Скинути запит</button>
-      <p>Стан запиту: {requestState.requestStep}</p>
+      <button onClick={startRequest}>Start request</button>
+      <button onClick={resetRequest}>Reset request</button>
+      <p>Request state: {requestState.requestStep}</p>
     </div>
   );
 }
@@ -120,9 +127,12 @@ export function RequestComponent() {
 export default RequestComponent;
 ```
 
-# Завдання 3
+## Task 3
 
-Ви створюєте компонент форми у React. Ви маєте поле введення, в якому ви хочете відстежити зміни. Для цього ви використовуєте обробник подій onChange. Ваше завдання – правильно типізувати подію, яка передається у цю функцію.
+You are creating a form component in `React`. You have an input field where you want to track
+changes.  
+For this purpose, you're using the `onChange` event handler.  
+Your task is to correctly type the event being passed to this function.
 
 ```ts
 import React, { useState } from "react";
@@ -130,7 +140,7 @@ import React, { useState } from "react";
 export function FormComponent() {
   const [value, setValue] = useState("");
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setValue(event.target.value);
   };
 
@@ -138,16 +148,18 @@ export function FormComponent() {
 }
 ```
 
-# Завдання 4
+## Task 4
 
-Ви вирішили застосувати до меню контекст і тепер вам потрібно його типізувати.
+You've decided to apply context to the menu and now you need to type it.
 
-Описати тип SelectedMenu: Це має бути об'єкт, який містить id з типом MenuIds
+Describe the type `SelectedMenu`: It should be an object containing an `id` of type `MenuIds`.
 
-Описати тип MenuSelected: Цей тип є об'єктом, що містить selectedMenu
+Describe the type `MenuSelected`: This type is an object that contains `selectedMenu`.
 
-Описати тип MenuAction: Цей тип являє собою об'єкт з методом onSelectedMenu, який приймає об'єкт типу SelectedMenu як аргумент повертає void.
+Describe the type `MenuAction`: This type is an object with a method `onSelectedMenu` that takes an
+object of type `SelectedMenu` as an argument and returns `void`.
 
-Описати тип PropsProvider: Опишіть правильний тип для дітей
+Describe the type `PropsProvider`: Provide the correct type for children.
 
-Описати тип PropsMenu: Опишіть тип для menus, він має бути від типу Menu
+Describe the type `PropsMenu`: Define the type for `menus`; it should be derived from the type
+`Menu`.
